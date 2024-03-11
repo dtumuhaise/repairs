@@ -1,17 +1,11 @@
 from django.db import models
 
 
-class Customers(models.Model):
+class Repairs(models.Model):
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.firstname + ' ' + self.lastname
-
-
-class Guitars(models.Model):
-    customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
     guitar_type = models.CharField(max_length=50)
     brand = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
@@ -22,4 +16,4 @@ class Guitars(models.Model):
     repair_status = models.CharField(max_length=50, default='Pending')
 
     def __str__(self):
-        return self.brand + ' ' + self.model + ' ' + self.repair_status
+        return self.firstname + ' ' + self.lastname + ' - ' + self.guitar_type + ' ' + self.brand + ' ' + self.model + ' ' + self.repair_status
