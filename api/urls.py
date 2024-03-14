@@ -1,7 +1,8 @@
+from django.contrib import admin
 from django.urls import path
-from .views import RepairsList, RepairsDetail
+from api import views
 
 urlpatterns = [
-    path('repairs/', RepairsList.as_view()),
-    path('repairs/<int:pk>/', RepairsDetail.as_view()),
+    path('repairs/', views.repairs_list),
+    path('repairs/<int:id>/', views.repairs_detail),
 ]
