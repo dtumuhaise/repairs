@@ -23,9 +23,9 @@ def repairs_list(request):
 
 
 @api_view(['PUT', 'DELETE'])
-def repairs_detail(request, id):
+def repairs_detail(request, pk):
     try:
-        data = Repairs.objects.get(id=id)
+        data = Repairs.objects.get(id=pk)
     except Repairs.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
