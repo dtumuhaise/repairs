@@ -5,4 +5,4 @@ from .models import Repairs
 class RepairsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Repairs
-        fields = '__all__'
+        fields = ('__all__')

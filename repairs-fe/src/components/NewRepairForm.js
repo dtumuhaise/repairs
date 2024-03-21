@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, FormGroup, Label, Input, Row, Col } from "reactstrap";
 import axios from "axios";
 import { API_URL } from "../constants";
 
-class NewRepairForm extends React.Component {
-    state = {
+const NewRepairForm = ({ repair, resetState, toggle }) => {
+    const [formData, setFormData] = useState({
         id: 0,
         firstname: "",
         lastname: "",
@@ -17,207 +17,205 @@ class NewRepairForm extends React.Component {
         repair_notes: "",
         date_of_entry: "",
         repair_status: ""
+    });
+
+    useEffect(() => {
+        if (repair) {
+            setFormData(repair);
+        }
+    }, [repair]);
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
     };
 
-    componentDidMount() {
-        if (this.props.repair) {
-            const {
-                id,
-                firstname,
-                lastname,
-                phone,
-                guitar_type,
-                brand,
-                model,
-                serial_number,
-                color,
-                repair_notes,
-                date_of_entry,
-                repair_status
-            } = this.props.repair;
-            this.setState({
-                id,
-                firstname,
-                lastname,
-                phone,
-                guitar_type,
-                brand,
-                model,
-                serial_number,
-                color,
-                repair_notes,
-                date_of_entry,
-                repair_status
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const url = repair ? `${API_URL}${formData.id}/` : API_URL;
+        const method = repair ? "put" : "post";
+        axios[method](url, formData).then(() => {
+            resetState();
+            toggle();
+        });
+    };
+
+    const handleDelete = () => {
+        if (window.confirm("Are you sure you want to delete this repair?")) {
+            axios.delete(`${API_URL}${formData.id}/`).then(() => {
+                resetState();
+                toggle();
             });
         }
-    }
-
-    onChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
     };
 
-    createRepair = (e) => {
-        e.preventDefault();
-        axios.post(API_URL, this.state).then(() => {
-            this.props.resetState();
-            this.props.toggle();
-        });
-    };
+    const defaultIfEmpty = (value) => (value ? value : "");
 
-    editRepair = (e) => {
-        e.preventDefault();
-        axios.put(API_URL + this.state.id, this.state).then(() => {
-            this.props.resetState();
-            this.props.toggle();
-        });
-    };
-
-    defaultIfEmpty = (value) => {
-        return value === "" ? "" : value;
-    };
-
-    render() {
-        return (
-            <Form onSubmit={this.props.repair ? this.editRepair : this.createRepair}>
-                <Row>
-                    <Col md={6}>
-                        <FormGroup>
-                            <Label for="firstname">First Name:</Label>
-                            <Input
-                                type="text"
-                                name="firstname"
-                                tabIndex={1}
-                                onChange={this.onChange}
-                                value={this.defaultIfEmpty(this.state.firstname)}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="phone">Phone:</Label>
-                            <Input
-                                type="text"
-                                name="phone"
-                                tabIndex={3}
-                                onChange={this.onChange}
-                                value={this.defaultIfEmpty(this.state.phone)}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="brand">Brand:</Label>
-                            <Input
-                                type="text"
-                                name="brand"
-                                tabIndex={5}
-                                onChange={this.onChange}
-                                value={this.defaultIfEmpty(this.state.brand)}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="serial_number">Serial Number:</Label>
-                            <Input
-                                type="text"
-                                name="serial_number"
-                                tabIndex={7}
-                                onChange={this.onChange}
-                                value={this.defaultIfEmpty(this.state.serial_number)}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="date_of_entry">Date of Entry:</Label>
-                            <Input
-                                type="date"
-                                name="date_of_entry"
-                                tabIndex={9}
-                                onChange={this.onChange}
-                                value={this.defaultIfEmpty(this.state.date_of_entry)}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col md={6}>
-                        <FormGroup>
-                            <Label for="lastname">Last Name:</Label>
-                            <Input
-                                type="text"
-                                name="lastname"
-                                tabIndex={2}
-                                onChange={this.onChange}
-                                value={this.defaultIfEmpty(this.state.lastname)}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="guitar_type">Guitar Type:</Label>
-                            <Input
-                                type="select"
-                                name="guitar_type"
-                                tabIndex={4}
-                                onChange={this.onChange}
-                                value={this.defaultIfEmpty(this.state.guitar_type)}
-                            >
-                                <option value="Electric">Electric</option>
-                                <option value="Acoustic">Acoustic</option>
-                                <option value="Bass">Bass</option>
-                                <option value="Classical">Classical</option>
-                            </Input>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="model">Model:</Label>
-                            <Input
-                                type="select"
-                                name="model"
-                                tabIndex={6}
-                                onChange={this.onChange}
-                                value={this.defaultIfEmpty(this.state.model)}
-                            >
-                                <option value="Stratocaster">Stratocaster</option>
-                                <option value="Telecaster">Telecaster</option>
-                                <option value="Les Paul">Les Paul</option>
-                                <option value="SG">SG</option>
-                                <option value="Hollow Body">Hollow Body</option>
-                                <option value="Jazz Bass">Jazz Bass</option>
-                                <option value="Precision Bass">Precision Bass</option>
-                                <option value="Jazzmaster">Jazzmaster</option>
-                                <option value="Acoustic">Acoustic</option>
-                            </Input>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="color">Color:</Label>
-                            <Input
-                                type="text"
-                                name="color"
-                                tabIndex={8}
-                                onChange={this.onChange}
-                                value={this.defaultIfEmpty(this.state.color)}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="repair_status">Repair Status:</Label>
-                            <Input
-                                type="select"
-                                name="repair_status"
-                                tabIndex={10}
-                                onChange={this.onChange}
-                                value={this.defaultIfEmpty(this.state.repair_status)}
-                            >
-                                <option value="Not Started">Not Started</option>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Completed">Completed</option>
-                            </Input>
-                        </FormGroup>
-                    </Col>
-                </Row>
-                <FormGroup>
-                    <Label for="repair_notes">Repair Notes:</Label>
-                    <Input
-                        type="textarea"
-                        name="repair_notes"
-                        tabIndex={11}
-                        onChange={this.onChange}
-                        value={this.defaultIfEmpty(this.state.repair_notes)}
-                    />
-                </FormGroup>
-                <Button>Create Repair</Button>
-            </Form>
-        );
-    }
-}
+    return (
+        <Form onSubmit={handleSubmit}>
+            <Row>
+                {/* First Column */}
+                <Col md={6}>
+                    <FormGroup>
+                        <Label for="firstname">First Name: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="text"
+                            name="firstname"
+                            tabIndex={1}
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.firstname)}
+                            required
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="phone">Phone: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="text"
+                            name="phone"
+                            tabIndex={3}
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.phone)}
+                            required
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="brand">Brand: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="text"
+                            name="brand"
+                            tabIndex={5}
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.brand)}
+                            required
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="serial_number">Serial Number: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="text"
+                            name="serial_number"
+                            tabIndex={7}
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.serial_number)}
+                            required
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="date_of_entry">Date of Entry: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="date"
+                            name="date_of_entry"
+                            tabIndex={9}
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.date_of_entry)}
+                            required
+                        />
+                    </FormGroup>
+                </Col>
+                {/* Second Column */}
+                <Col md={6}>
+                    <FormGroup>
+                        <Label for="lastname">Last Name: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="text"
+                            name="lastname"
+                            tabIndex={2}
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.lastname)}
+                            required
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="guitar_type">Guitar Type: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="select"
+                            name="guitar_type"
+                            tabIndex={4}
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.guitar_type)}
+                            required
+                        >
+                            <option value="">Select Guitar Type</option>
+                            <option value="Electric">Electric</option>
+                            <option value="Acoustic">Acoustic</option>
+                            <option value="Bass">Bass</option>
+                            <option value="Classical">Classical</option>
+                        </Input>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="model">Model: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="select"
+                            name="model"
+                            tabIndex={6}
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.model)}
+                            required
+                        >
+                            <option value="">Select Model</option>
+                            <option value="Stratocaster">Stratocaster</option>
+                            <option value="Telecaster">Telecaster</option>
+                            <option value="Les Paul">Les Paul</option>
+                            <option value="SG">SG</option>
+                            <option value="Hollow Body">Hollow Body</option>
+                            <option value="Jazz Bass">Jazz Bass</option>
+                            <option value="Precision Bass">Precision Bass</option>
+                            <option value="Jazzmaster">Jazzmaster</option>
+                            <option value="Acoustic">Acoustic</option>
+                        </Input>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="color">Color: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="text"
+                            name="color"
+                            tabIndex={8}
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.color)}
+                            required
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="repair_status">Repair Status: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="select"
+                            name="repair_status"
+                            tabIndex={10}
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.repair_status)}
+                            required
+                        >
+                            <option value="">Select Repair Status</option>
+                            <option value="Not Started">Not Started</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </Input>
+                    </FormGroup>
+                </Col>
+            </Row>
+            {/* Repair Notes */}
+            <FormGroup>
+                <Label for="repair_notes">Repair Notes: <span className="text-danger">*</span></Label>
+                <Input
+                    type="textarea"
+                    name="repair_notes"
+                    tabIndex={11}
+                    onChange={handleChange}
+                    value={defaultIfEmpty(formData.repair_notes)}
+                    required
+                />
+            </FormGroup>
+            {/* Buttons */}
+            <div className="d-flex justify-content-between">
+                <Button color="primary" type="submit">Save</Button>
+                {repair && (
+                    <Button color="danger" onClick={handleDelete}>Delete</Button>
+                )}
+            </div>
+        </Form>
+    );
+};
 
 export default NewRepairForm;

@@ -24,7 +24,7 @@ class NewRepairModal extends Component {
       button = (
         <Button
           color="primary"
-          className="float-right"
+          className="float-center"
           onClick={this.toggle}
           style={{ minWidth: "200px" }}
         >
