@@ -1,15 +1,8 @@
 from rest_framework import serializers
-from .models import Customers, Guitars
+from .models import Repairs
 
 
-class CustomersSerializer(serializers.ModelSerializer):
+class RepairsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Customers
-        fields = ['id', 'firstname', 'lastname', 'phone']
-
-
-class GuitarsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Guitars
-        fields = ['id', 'customer', 'guitar_type', 'brand', 'model',
-                  'serial_number', 'color', 'date_of_entry', 'repair_notes', 'repair_status']
+        model = Repairs
+        fields = ('__all__')

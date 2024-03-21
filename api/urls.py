@@ -1,9 +1,8 @@
+from django.contrib import admin
 from django.urls import path
-from .views import CustomerList, CustomerDetail, GuitarList, GuitarDetail
+from .views import repairs_list, repairs_detail
 
 urlpatterns = [
-    path('customers/', CustomerList.as_view()),
-    path('customers/<int:pk>/', CustomerDetail.as_view()),
-    path('guitars/', GuitarList.as_view()),
-    path('guitars/<int:pk>/', GuitarDetail.as_view()),
+    path('repairs/', repairs_list.as_view()),
+    path('repairs/<int:pk>/', repairs_detail.as_view()),
 ]
