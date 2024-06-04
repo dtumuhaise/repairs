@@ -6,7 +6,7 @@ class Header extends Component {
     render () {
         return (
         <div className="text-center">
-            <h1> Guitar Repair App</h1>
+            <h1>Repair Mate</h1>
         </div>
            
         )
