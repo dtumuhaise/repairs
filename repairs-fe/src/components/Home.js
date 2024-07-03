@@ -27,6 +27,12 @@ class Home extends Component {
     render() {
         return (
             <Container style={{ marginTop: "20px" }}>
+
+                <Row>
+                    <Col>
+                        <NewRepairModal create={true} resetState={this.resetState} />
+                    </Col>
+                </Row>
                 <Row>
                     <Col>
                         <RepairList
@@ -35,11 +41,7 @@ class Home extends Component {
                         />
                     </Col>
                 </Row>
-                <Row>
-                    <Col>
-                        <NewRepairModal create={true} resetState={this.resetState} />
-                    </Col>
-                </Row>
+                
             </Container>
         );
     }

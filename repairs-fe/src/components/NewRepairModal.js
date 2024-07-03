@@ -22,14 +22,15 @@ class NewRepairModal extends Component {
       title = "Creating New Repair";
 
       button = (
-        <Button
+        <div className="d-flex justify-content-center">
+          <Button 
           color="primary"
           className="float-center"
           onClick={this.toggle}
-          style={{ minWidth: "200px" }}
-        >
+          style={{ minWidth: "200px" }}>
           New Repair
         </Button>
+        </div>
       );
     }
 

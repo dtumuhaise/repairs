@@ -54,85 +54,59 @@ const NewRepairForm = ({ repair, resetState, toggle }) => {
     const defaultIfEmpty = (value) => (value ? value : "");
 
     return (
-        <Form onSubmit={handleSubmit}>
-            <Row>
-                {/* First Column */}
+        <Form onSubmit={handleSubmit} className="p-3">
+            {/* Contact Details */}
+            <h5 className="mb-3">Contact Details</h5>
+            <Row form>
                 <Col md={6}>
                     <FormGroup>
                         <Label for="firstname">First Name: <span className="text-danger">*</span></Label>
                         <Input
                             type="text"
                             name="firstname"
-                            tabIndex={1}
+                            id="firstname"
                             onChange={handleChange}
                             value={defaultIfEmpty(formData.firstname)}
                             required
                         />
                     </FormGroup>
-                    <FormGroup>
-                        <Label for="phone">Phone: <span className="text-danger">*</span></Label>
-                        <Input
-                            type="text"
-                            name="phone"
-                            tabIndex={3}
-                            onChange={handleChange}
-                            value={defaultIfEmpty(formData.phone)}
-                            required
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="brand">Brand: <span className="text-danger">*</span></Label>
-                        <Input
-                            type="text"
-                            name="brand"
-                            tabIndex={5}
-                            onChange={handleChange}
-                            value={defaultIfEmpty(formData.brand)}
-                            required
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="serial_number">Serial Number: <span className="text-danger">*</span></Label>
-                        <Input
-                            type="text"
-                            name="serial_number"
-                            tabIndex={7}
-                            onChange={handleChange}
-                            value={defaultIfEmpty(formData.serial_number)}
-                            required
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="date_of_entry">Date of Entry: <span className="text-danger">*</span></Label>
-                        <Input
-                            type="date"
-                            name="date_of_entry"
-                            tabIndex={9}
-                            onChange={handleChange}
-                            value={defaultIfEmpty(formData.date_of_entry)}
-                            required
-                        />
-                    </FormGroup>
                 </Col>
-                {/* Second Column */}
                 <Col md={6}>
                     <FormGroup>
                         <Label for="lastname">Last Name: <span className="text-danger">*</span></Label>
                         <Input
                             type="text"
                             name="lastname"
-                            tabIndex={2}
+                            id="lastname"
                             onChange={handleChange}
                             value={defaultIfEmpty(formData.lastname)}
                             required
                         />
                     </FormGroup>
+                </Col>
+            </Row>
+            <FormGroup>
+                <Label for="phone">Phone: <span className="text-danger">*</span></Label>
+                <Input
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    onChange={handleChange}
+                    value={defaultIfEmpty(formData.phone)}
+                    required
+                />
+            </FormGroup>
+
+            {/* Guitar Details */}
+            <h5 className="mt-4 mb-3">Guitar Details</h5>
+            <Row form>
+                <Col md={6}>
                     <FormGroup>
                         <Label for="guitar_type">Guitar Type: <span className="text-danger">*</span></Label>
                         <Input
                             type="select"
                             name="guitar_type"
-                            tabIndex={4}
+                            id="guitar_type"
                             onChange={handleChange}
                             value={defaultIfEmpty(formData.guitar_type)}
                             required
@@ -144,12 +118,29 @@ const NewRepairForm = ({ repair, resetState, toggle }) => {
                             <option value="Classical">Classical</option>
                         </Input>
                     </FormGroup>
+                </Col>
+                <Col md={6}>
+                    <FormGroup>
+                        <Label for="brand">Brand: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="text"
+                            name="brand"
+                            id="brand"
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.brand)}
+                            required
+                        />
+                    </FormGroup>
+                </Col>
+            </Row>
+            <Row form>
+                <Col md={6}>
                     <FormGroup>
                         <Label for="model">Model: <span className="text-danger">*</span></Label>
                         <Input
                             type="select"
                             name="model"
-                            tabIndex={6}
+                            id="model"
                             onChange={handleChange}
                             value={defaultIfEmpty(formData.model)}
                             required
@@ -166,23 +157,56 @@ const NewRepairForm = ({ repair, resetState, toggle }) => {
                             <option value="Acoustic">Acoustic</option>
                         </Input>
                     </FormGroup>
+                </Col>
+                <Col md={6}>
                     <FormGroup>
-                        <Label for="color">Color: <span className="text-danger">*</span></Label>
+                        <Label for="serial_number">Serial Number: <span className="text-danger">*</span></Label>
                         <Input
                             type="text"
-                            name="color"
-                            tabIndex={8}
+                            name="serial_number"
+                            id="serial_number"
                             onChange={handleChange}
-                            value={defaultIfEmpty(formData.color)}
+                            value={defaultIfEmpty(formData.serial_number)}
                             required
                         />
                     </FormGroup>
+                </Col>
+            </Row>
+            <FormGroup>
+                <Label for="color">Color: <span className="text-danger">*</span></Label>
+                <Input
+                    type="text"
+                    name="color"
+                    id="color"
+                    onChange={handleChange}
+                    value={defaultIfEmpty(formData.color)}
+                    required
+                />
+            </FormGroup>
+
+            {/* Repair Details */}
+            <h5 className="mt-4 mb-3">Repair Details</h5>
+            <Row form>
+                <Col md={6}>
+                    <FormGroup>
+                        <Label for="date_of_entry">Date of Entry: <span className="text-danger">*</span></Label>
+                        <Input
+                            type="date"
+                            name="date_of_entry"
+                            id="date_of_entry"
+                            onChange={handleChange}
+                            value={defaultIfEmpty(formData.date_of_entry)}
+                            required
+                        />
+                    </FormGroup>
+                </Col>
+                <Col md={6}>
                     <FormGroup>
                         <Label for="repair_status">Repair Status: <span className="text-danger">*</span></Label>
                         <Input
                             type="select"
                             name="repair_status"
-                            tabIndex={10}
+                            id="repair_status"
                             onChange={handleChange}
                             value={defaultIfEmpty(formData.repair_status)}
                             required
@@ -195,18 +219,18 @@ const NewRepairForm = ({ repair, resetState, toggle }) => {
                     </FormGroup>
                 </Col>
             </Row>
-            {/* Repair Notes */}
             <FormGroup>
                 <Label for="repair_notes">Repair Notes: <span className="text-danger">*</span></Label>
                 <Input
                     type="textarea"
                     name="repair_notes"
-                    tabIndex={11}
+                    id="repair_notes"
                     onChange={handleChange}
                     value={defaultIfEmpty(formData.repair_notes)}
                     required
                 />
             </FormGroup>
+
             {/* Buttons */}
             <div className="d-flex justify-content-between">
                 <Button color="primary" type="submit">Save</Button>

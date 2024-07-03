@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Table, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { Table, Modal, ModalHeader, ModalBody, ModalFooter, Button, Input } from "reactstrap";
+import axios from "axios";
+import { API_URL } from "../constants";
 import NewRepairModal from "./NewRepairModal";
 
 const RepairList = ({ repairs, resetState }) => {
@@ -38,43 +40,53 @@ const RepairList = ({ repairs, resetState }) => {
         return null;
     };
 
+    const handleStatusChange = (repair, newStatus) => {
+        const updatedRepair = { ...repair, repair_status: newStatus };
+        axios.put(`${API_URL}${repair.id}/`, updatedRepair).then(() => {
+            resetState();
+        });
+    };
+
     return (
-        <div>
-            <Table className="table table-striped table-responsive">
+        <div className="container-fluid">
+            <Table responsive striped>
                 <thead>
                     <tr>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Phone</th>
-                        <th>Guitar Type</th>
-                        <th>Model</th>
-                        <th>Brand</th>
-                        <th onClick={() => handleSort("repair_status")}>Status {renderSortIcon("repair_status")}</th>
-                        <th onClick={() => handleSort("date_of_entry")}>Date Added {renderSortIcon("date_of_entry")}</th>
+                        <th onClick={() => handleSort("repair_status")} className="sortable">Status {renderSortIcon("repair_status")}</th>
+                        <th onClick={() => handleSort("date_of_entry")} className="sortable">Date Added {renderSortIcon("date_of_entry")}</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {!sortedRepairs || sortedRepairs.length === 0 ? (
                         <tr>
-                            <td colSpan="9" align="center">
+                            <td colSpan="6" className="text-center">
                                 <b>Ops, no one here yet</b>
                             </td>
                         </tr>
                     ) : (
                         sortedRepairs.map(repair => (
-                            <tr key={repair.id}>
+                            <tr key={repair.id} onClick={() => toggleModal(repair)} style={{ cursor: "pointer" }}>
                                 <td>{repair.firstname}</td>
                                 <td>{repair.lastname}</td>
                                 <td>{repair.phone}</td>
-                                <td>{repair.guitar_type}</td>
-                                <td>{repair.model}</td>
-                                <td>{repair.brand}</td>
-                                <td>{repair.repair_status}</td>
-                                <td>{repair.date_of_entry}</td>
                                 <td>
-                                    <Button color="info" onClick={() => toggleModal(repair)}>View</Button>
-                                    &nbsp;&nbsp;
+                                    <Input
+                                        type="select"
+                                        value={repair.repair_status}
+                                        onClick={(e) => e.stopPropagation()}
+                                        onChange={(e) => handleStatusChange(repair, e.target.value)}
+                                    >
+                                        <option value="Not Started">Not Started</option>
+                                        <option value="In Progress">In Progress</option>
+                                        <option value="Completed">Completed</option>
+                                    </Input>
+                                </td>
+                                <td>{repair.date_of_entry}</td>
+                                <td onClick={(e) => e.stopPropagation()}>
                                     <NewRepairModal
                                         create={false}
                                         repair={repair}
@@ -87,11 +99,14 @@ const RepairList = ({ repairs, resetState }) => {
                 </tbody>
             </Table>
 
-            <Modal isOpen={modal} toggle={toggleModal}>
-                <ModalHeader toggle={toggleModal}>Repair Details</ModalHeader>
+            <Modal isOpen={modal} toggle={toggleModal} >
+                <div className="d-flex justify-content-center">
+                    <ModalHeader>Repair Details</ModalHeader>
+                </div>
+                
                 <ModalBody>
                     {selectedRepair && (
-                        <div>
+                        <div className="container-fluid">
                             <p><strong>First Name:</strong> {selectedRepair.firstname}</p>
                             <p><strong>Last Name:</strong> {selectedRepair.lastname}</p>
                             <p><strong>Phone:</strong> {selectedRepair.phone}</p>
@@ -104,7 +119,7 @@ const RepairList = ({ repairs, resetState }) => {
                         </div>
                     )}
                 </ModalBody>
-                <ModalFooter>
+                <ModalFooter className="d-flex justify-content-center">
                     <Button color="secondary" onClick={toggleModal}>Close</Button>
                 </ModalFooter>
             </Modal>
